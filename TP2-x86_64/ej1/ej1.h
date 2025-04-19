@@ -20,7 +20,7 @@ typedef struct string_proc_node_t {
 	uint8_t type;
 	char* hash;
 } string_proc_node;
-       
+
 /** Funciones a implementar:  **/
 string_proc_list* string_proc_list_create(void);
 string_proc_list* string_proc_list_create_asm(void);
@@ -46,7 +46,7 @@ void string_proc_list_destroy(string_proc_list* list);
 void string_proc_node_destroy(string_proc_node* node);
 
 /**
- * 	Concatena dos strings a y b. 
+ * 	Concatena dos strings a y b.
  *  Retorna el resultado en uno nuevo, creado via malloc.
 */
 char* str_concat(char* a, char* b);
@@ -55,3 +55,8 @@ char* str_concat(char* a, char* b);
  *  Imprime la lista list en el archivo file.
 */
 void string_proc_list_print(string_proc_list* list, FILE* file);
+
+/**
+ * Verifica si el puntero ptr es NULL. Si lo es, imprime error_msg y termina el programa.
+*/
+void check_malloc(void* ptr, char* error_msg);

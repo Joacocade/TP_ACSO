@@ -1,0 +1,451 @@
+$nm bomb | grep phase
+00000000004022d6 T invalid_phase
+0000000000401de7 T phase_1
+0000000000401e50 T phase_2
+000000000040202b T phase_3
+0000000000402127 T phase_4
+0000000000402638 T phase_defused
+0000000000402219 T secret_phase
+
+$gdb --args ./bomb
+
+$(gdb) break explode_bomb
+$(gdb) run < input.txt
+
+$(gdb) disas phase_defused
+Dump of assembler code for function phase_defused:
+   0x0000000000402638 <+0>:     endbr64
+   0x000000000040263c <+4>:     sub    rsp,0x118
+   0x0000000000402643 <+11>:    mov    rax,QWORD PTR fs:0x28
+   0x000000000040264c <+20>:    mov    QWORD PTR [rsp+0x108],rax
+   0x0000000000402654 <+28>:    xor    eax,eax
+   0x0000000000402656 <+30>:    cmp    DWORD PTR [rip+0xf8b5b],0x4        # 0x4fb1b8 <num_input_strings>
+   0x000000000040265d <+37>:    je     0x40267a <phase_defused+66>
+   0x000000000040265f <+39>:    mov    rax,QWORD PTR [rsp+0x108]
+   0x0000000000402667 <+47>:    sub    rax,QWORD PTR fs:0x28
+   0x0000000000402670 <+56>:    jne    0x4026eb <phase_defused+179>
+   0x0000000000402672 <+58>:    add    rsp,0x118
+   0x0000000000402679 <+65>:    ret
+   0x000000000040267a <+66>:    lea    rcx,[rsp+0xc]
+   0x000000000040267f <+71>:    lea    rdx,[rsp+0x90]
+   0x0000000000402687 <+79>:    lea    r8,[rsp+0x10]
+   0x000000000040268c <+84>:    lea    rsi,[rip+0xc4aba]        # 0x4c714d
+   0x0000000000402693 <+91>:    lea    rdi,[rip+0xf8c16]        # 0x4fb2b0 <input_strings+240>
+   0x000000000040269a <+98>:    call   0x407540 <__isoc99_sscanf>
+   0x000000000040269f <+103>:   cmp    eax,0x3
+   0x00000000004026a2 <+106>:   je     0x4026b2 <phase_defused+122>
+   0x00000000004026a4 <+108>:   lea    rdi,[rip+0xc74c5]        # 0x4c9b70
+   0x00000000004026ab <+115>:   call   0x4111a0 <puts>
+   0x00000000004026b0 <+120>:   jmp    0x40265f <phase_defused+39>
+   0x00000000004026b2 <+122>:   lea    rdi,[rsp+0x10]
+   0x00000000004026b7 <+127>:   lea    rsi,[rip+0xc4a98]        # 0x4c7156
+   0x00000000004026be <+134>:   call   0x402324 <strings_not_equal>
+   0x00000000004026c3 <+139>:   test   eax,eax
+   0x00000000004026c5 <+141>:   jne    0x4026a4 <phase_defused+108>
+   0x00000000004026c7 <+143>:   lea    rdi,[rip+0xc7442]        # 0x4c9b10
+   0x00000000004026ce <+150>:   call   0x4111a0 <puts>
+   0x00000000004026d3 <+155>:   lea    rdi,[rip+0xc7466]        # 0x4c9b40
+   0x00000000004026da <+162>:   call   0x4111a0 <puts>
+   0x00000000004026df <+167>:   mov    eax,0x0
+   0x00000000004026e4 <+172>:   call   0x402219 <secret_phase>
+   0x00000000004026e9 <+177>:   jmp    0x4026a4 <phase_defused+108>
+   0x00000000004026eb <+179>:   call   0x432160 <__stack_chk_fail_local>
+
+=================================================================================
+
+$(gdb) disas phase_1
+
+0x0000000000401de7 <+0>:     endbr64
+0x0000000000401deb <+4>:     sub    rsp,0x8
+0x0000000000401def <+8>:     lea    rsi,[rip+0xc7c6a]        # 0x4c9a60
+0x0000000000401df6 <+15>:    call   0x402324 <strings_not_equal>
+0x0000000000401dfb <+20>:    test   eax,eax
+0x0000000000401dfd <+22>:    jne    0x401e04 <phase_1+29>
+0x0000000000401dff <+24>:    add    rsp,0x8
+0x0000000000401e03 <+28>:    ret
+0x0000000000401e04 <+29>:    call   0x40244d <explode_bomb>
+0x0000000000401e09 <+34>:    jmp    0x401dff <phase_1+24>
+
+$(gdb) x/s 0x4c9a60
+"Confia en el tiempo, que suele dar dulces salidas a muchas amargas dificultades"
+
+$cat -A input.txt
+Confia en el tiempo, que suele dar dulces salidas a muchas amargas dificultades$
+
+=================================================================================
+
+$(gdb) disas phase_2
+Dump of assembler code for function phase_2:
+   0x0000000000401e50 <+0>:     endbr64
+   0x0000000000401e54 <+4>:     push   r12
+   0x0000000000401e56 <+6>:     push   rbp
+   0x0000000000401e57 <+7>:     push   rbx
+   0x0000000000401e58 <+8>:     mov    rbx,rdi
+   0x0000000000401e5b <+11>:    mov    esi,0x20
+   0x0000000000401e60 <+16>:    call   0x4011c0
+   0x0000000000401e65 <+21>:    mov    rbp,rax
+   0x0000000000401e68 <+24>:    test   rax,rax
+   0x0000000000401e6b <+27>:    je     0x401ea6 <phase_2+86>
+   0x0000000000401e6d <+29>:    mov    edx,0xa
+   0x0000000000401e72 <+34>:    mov    esi,0x0
+   0x0000000000401e77 <+39>:    mov    rdi,rbx
+   0x0000000000401e7a <+42>:    call   0x4068d0 <strtoq>
+   0x0000000000401e7f <+47>:    mov    rbx,rax
+   0x0000000000401e82 <+50>:    mov    edx,0xa
+   0x0000000000401e87 <+55>:    mov    esi,0x0
+   0x0000000000401e8c <+60>:    mov    rdi,rbp
+   0x0000000000401e8f <+63>:    call   0x4068d0 <strtoq>
+   0x0000000000401e94 <+68>:    mov    edx,eax
+   0x0000000000401e96 <+70>:    lea    edi,[rbx+rax*1-0x20]
+   0x0000000000401e9a <+74>:    mov    esi,ebx
+   0x0000000000401e9c <+76>:    call   0x401e0b <misterio>
+   0x0000000000401ea1 <+81>:    pop    rbx
+   0x0000000000401ea2 <+82>:    pop    rbp
+   0x0000000000401ea3 <+83>:    pop    r12
+   0x0000000000401ea5 <+85>:    ret
+   0x0000000000401ea6 <+86>:    call   0x40244d <explode_bomb>
+   0x0000000000401eab <+91>:    jmp    0x401e6d <phase_2+29>
+
+$(gdb) disas misterio
+Dump of assembler code for function misterio:
+   0x0000000000401e0b <+0>:     endbr64
+   0x0000000000401e0f <+4>:     push   rbp
+   0x0000000000401e10 <+5>:     push   rbx
+   0x0000000000401e11 <+6>:     sub    rsp,0x8
+   0x0000000000401e15 <+10>:    mov    ebx,esi
+   0x0000000000401e17 <+12>:    mov    ebp,edx
+   0x0000000000401e19 <+14>:    mov    ecx,0x0
+   0x0000000000401e1e <+19>:    mov    edx,0x0
+   0x0000000000401e23 <+24>:    mov    eax,edi
+   0x0000000000401e25 <+26>:    sar    eax,cl
+   0x0000000000401e27 <+28>:    and    eax,0x1
+   0x0000000000401e2a <+31>:    add    edx,eax
+   0x0000000000401e2c <+33>:    add    ecx,0x1
+   0x0000000000401e2f <+36>:    cmp    ecx,0x20
+   0x0000000000401e32 <+39>:    jne    0x401e23 <misterio+24>
+   0x0000000000401e34 <+41>:    cmp    edx,0xb
+   0x0000000000401e37 <+44>:    jne    0x401e49 <misterio+62>
+   0x0000000000401e39 <+46>:    xor    ebx,ebp
+   0x0000000000401e3b <+48>:    js     0x401e42 <misterio+55>
+   0x0000000000401e3d <+50>:    call   0x40244d <explode_bomb>
+   0x0000000000401e42 <+55>:    add    rsp,0x8
+   0x0000000000401e46 <+59>:    pop    rbx
+   0x0000000000401e47 <+60>:    pop    rbp
+   0x0000000000401e48 <+61>:    ret
+   0x0000000000401e49 <+62>:    call   0x40244d <explode_bomb>
+   0x0000000000401e4e <+67>:    jmp    0x401e39 <misterio+46>
+
+=================================================================================
+
+$(gdb) disas phase_3
+Dump of assembler code for function phase_3:
+   0x000000000040202b <+0>:     endbr64
+   0x000000000040202f <+4>:     push   r13
+   0x0000000000402031 <+6>:     push   r12
+   0x0000000000402033 <+8>:     push   rbp
+   0x0000000000402034 <+9>:     push   rbx
+   0x0000000000402035 <+10>:    sub    rsp,0x28
+   0x0000000000402039 <+14>:    mov    rbx,rdi
+   0x000000000040203c <+17>:    mov    rax,QWORD PTR fs:0x28
+   0x0000000000402045 <+26>:    mov    QWORD PTR [rsp+0x18],rax
+   0x000000000040204a <+31>:    xor    eax,eax
+   0x000000000040204c <+33>:    mov    edi,0x1e
+   0x0000000000402051 <+38>:    call   0x41c430 <malloc>
+   0x0000000000402056 <+43>:    mov    r13,rax
+   0x0000000000402059 <+46>:    lea    rcx,[rsp+0xc]
+   0x000000000040205e <+51>:    mov    rdx,rax
+   0x0000000000402061 <+54>:    lea    rsi,[rip+0xc5031]        # 0x4c7099
+   0x0000000000402068 <+61>:    mov    rdi,rbx
+   0x000000000040206b <+64>:    mov    eax,0x0
+   0x0000000000402070 <+69>:    call   0x407540 <__isoc99_sscanf>
+   0x0000000000402075 <+74>:    cmp    eax,0x2
+   0x0000000000402078 <+77>:    jne    0x40210a <phase_3+223>
+   0x000000000040207e <+83>:    lea    rdi,[rsp+0x10]
+   0x0000000000402083 <+88>:    call   0x401ead <readlines>
+   0x0000000000402088 <+93>:    mov    r12,rax
+   0x000000000040208b <+96>:    mov    DWORD PTR [rsp+0x14],0x0
+   0x0000000000402093 <+104>:   mov    ebp,DWORD PTR [rsp+0x10]
+   0x0000000000402097 <+108>:   lea    ecx,[rbp-0x1]
+   0x000000000040209a <+111>:   lea    r8,[rsp+0x14]
+   0x000000000040209f <+116>:   mov    edx,0x0
+   0x00000000004020a4 <+121>:   mov    rsi,rax
+   0x00000000004020a7 <+124>:   mov    rdi,r13
+   0x00000000004020aa <+127>:   call   0x401f92 <cuenta>
+   0x00000000004020af <+132>:   mov    eax,DWORD PTR [rsp+0xc]
+   0x00000000004020b3 <+136>:   cmp    DWORD PTR [rsp+0x14],eax
+   0x00000000004020b7 <+140>:   jne    0x402114 <phase_3+233>    ; EXPLOTA ACA
+   0x00000000004020b9 <+142>:   cmp    DWORD PTR [rsp+0x14],0x6
+   0x00000000004020be <+147>:   jle    0x40211b <phase_3+240>
+   0x00000000004020c0 <+149>:   test   ebp,ebp
+   0x00000000004020c2 <+151>:   jle    0x4020df <phase_3+180>
+   0x00000000004020c4 <+153>:   mov    rbx,r12
+   0x00000000004020c7 <+156>:   movsxd rbp,ebp
+   0x00000000004020ca <+159>:   lea    rbp,[r12+rbp*8]
+   0x00000000004020ce <+163>:   mov    rdi,QWORD PTR [rbx]
+   0x00000000004020d1 <+166>:   call   0x41cb00 <free>
+   0x00000000004020d6 <+171>:   add    rbx,0x8
+   0x00000000004020da <+175>:   cmp    rbx,rbp
+   0x00000000004020dd <+178>:   jne    0x4020ce <phase_3+163>
+   0x00000000004020df <+180>:   mov    rdi,r12
+   0x00000000004020e2 <+183>:   call   0x41cb00 <free>
+   0x00000000004020e7 <+188>:   mov    rdi,r13
+   0x00000000004020ea <+191>:   call   0x41cb00 <free>
+   0x00000000004020ef <+196>:   mov    rax,QWORD PTR [rsp+0x18]
+   0x00000000004020f4 <+201>:   sub    rax,QWORD PTR fs:0x28
+   0x00000000004020fd <+210>:   jne    0x402122 <phase_3+247>
+   0x00000000004020ff <+212>:   add    rsp,0x28
+   0x0000000000402103 <+216>:   pop    rbx
+   0x0000000000402104 <+217>:   pop    rbp
+   0x0000000000402105 <+218>:   pop    r12
+   0x0000000000402107 <+220>:   pop    r13
+   0x0000000000402109 <+222>:   ret
+   0x000000000040210a <+223>:   call   0x40244d <explode_bomb>
+   0x000000000040210f <+228>:   jmp    0x40207e <phase_3+83>
+   0x0000000000402114 <+233>:   call   0x40244d <explode_bomb>
+   0x0000000000402119 <+238>:   jmp    0x4020b9 <phase_3+142>
+   0x000000000040211b <+240>:   call   0x40244d <explode_bomb>
+   0x0000000000402120 <+245>:   jmp    0x4020c0 <phase_3+149>
+   0x0000000000402122 <+247>:   call   0x432160 <__stack_chk_fail_local>
+End of assembler dump.
+
+$(gdb) disas cuenta
+Dump of assembler code for function cuenta:
+   0x0000000000401f92 <+0>:     endbr64
+   0x0000000000401f96 <+4>:     push   r15
+   0x0000000000401f98 <+6>:     push   r14
+   0x0000000000401f9a <+8>:     push   r13
+   0x0000000000401f9c <+10>:    push   r12
+   0x0000000000401f9e <+12>:    push   rbp
+   0x0000000000401f9f <+13>:    push   rbx
+   0x0000000000401fa0 <+14>:    sub    rsp,0x8
+   0x0000000000401fa4 <+18>:    mov    r14,rdi
+   0x0000000000401fa7 <+21>:    mov    r15,rsi
+   0x0000000000401faa <+24>:    mov    r12d,edx
+   0x0000000000401fad <+27>:    mov    ebp,ecx
+   0x0000000000401faf <+29>:    mov    r13,r8
+   0x0000000000401fb2 <+32>:    mov    ebx,edx
+   0x0000000000401fb4 <+34>:    xor    ebx,ecx
+   0x0000000000401fb6 <+36>:    sar    ebx,1
+   0x0000000000401fb8 <+38>:    mov    eax,edx
+   0x0000000000401fba <+40>:    and    eax,ecx
+   0x0000000000401fbc <+42>:    add    ebx,eax
+   0x0000000000401fbe <+44>:    mov    eax,DWORD PTR [r8]
+   0x0000000000401fc1 <+47>:    add    eax,0x1
+   0x0000000000401fc4 <+50>:    mov    DWORD PTR [r8],eax
+   0x0000000000401fc7 <+53>:    cmp    eax,0xb
+   0x0000000000401fca <+56>:    jg     0x401ff4 <cuenta+98>
+   0x0000000000401fcc <+58>:    movsxd rax,ebx
+   0x0000000000401fcf <+61>:    mov    rsi,QWORD PTR [r15+rax*8]
+   0x0000000000401fd3 <+65>:    mov    rdi,r14
+   0x0000000000401fd6 <+68>:    call   0x401140
+   0x0000000000401fdb <+73>:    test   eax,eax
+   0x0000000000401fdd <+75>:    je     0x401fe5 <cuenta+83>
+   0x0000000000401fdf <+77>:    js     0x401ffb <cuenta+105>
+   0x0000000000401fe1 <+79>:    cmp    ebp,ebx
+   0x0000000000401fe3 <+81>:    jg     0x402016 <cuenta+132>
+   0x0000000000401fe5 <+83>:    add    rsp,0x8
+   0x0000000000401fe9 <+87>:    pop    rbx
+   0x0000000000401fea <+88>:    pop    rbp
+   0x0000000000401feb <+89>:    pop    r12
+   0x0000000000401fed <+91>:    pop    r13
+   0x0000000000401fef <+93>:    pop    r14
+   0x0000000000401ff1 <+95>:    pop    r15
+   0x0000000000401ff3 <+97>:    ret
+   0x0000000000401ff4 <+98>:    call   0x40244d <explode_bomb>
+   0x0000000000401ff9 <+103>:   jmp    0x401fcc <cuenta+58>
+   0x0000000000401ffb <+105>:   cmp    r12d,ebx
+   0x0000000000401ffe <+108>:   jge    0x401fe5 <cuenta+83>
+   0x0000000000402000 <+110>:   lea    ecx,[rbx-0x1]
+   0x0000000000402003 <+113>:   mov    r8,r13
+   0x0000000000402006 <+116>:   mov    edx,r12d
+   0x0000000000402009 <+119>:   mov    rsi,r15
+   0x000000000040200c <+122>:   mov    rdi,r14
+   0x000000000040200f <+125>:   call   0x401f92 <cuenta>
+   0x0000000000402014 <+130>:   jmp    0x401fe5 <cuenta+83>
+   0x0000000000402016 <+132>:   lea    edx,[rbx+0x1]
+   0x0000000000402019 <+135>:   mov    r8,r13
+   0x000000000040201c <+138>:   mov    ecx,ebp
+   0x000000000040201e <+140>:   mov    rsi,r15
+   0x0000000000402021 <+143>:   mov    rdi,r14
+   0x0000000000402024 <+146>:   call   0x401f92 <cuenta>
+   0x0000000000402029 <+151>:   jmp    0x401fe5 <cuenta+83>
+End of assembler dump.
+
+$(gdb) x/s 0x4c7099
+0x4c7099:       "%s %d"
+
+
+Breakpoint 2, 0x000000000040202b in phase_3 ()
+$(gdb) nexti 33
+0x00000000004020b3 in phase_3 ()
+$(gdb) x/wx $rsp+0x14
+0x7fffffffdbf4: 0x00000009
+
+=================================================================================
+
+$(gdb) disas phase_4
+Dump of assembler code for function phase_4:
+   0x0000000000402127 <+0>:     endbr64
+   0x000000000040212b <+4>:     push   r12
+   0x000000000040212d <+6>:     push   rbp
+   0x000000000040212e <+7>:     push   rbx
+   0x000000000040212f <+8>:     sub    rsp,0x10
+   0x0000000000402133 <+12>:    mov    rbx,rdi
+   0x0000000000402136 <+15>:    mov    rax,QWORD PTR fs:0x28
+   0x000000000040213f <+24>:    mov    QWORD PTR [rsp+0x8],rax
+   0x0000000000402144 <+29>:    xor    eax,eax
+   0x0000000000402146 <+31>:    lea    r12,[rsp+0x1]
+   0x000000000040214b <+36>:    mov    rdx,r12
+   0x000000000040214e <+39>:    lea    rsi,[rip+0xc4ffe]        # 0x4c7153
+   0x0000000000402155 <+46>:    call   0x407540 <__isoc99_sscanf>
+   0x000000000040215a <+51>:    mov    ebp,eax
+   0x000000000040215c <+53>:    mov    rdi,r12
+   0x000000000040215f <+56>:    call   0x4011b0
+   0x0000000000402164 <+61>:    cmp    ebp,0x1
+   0x0000000000402167 <+64>:    jne    0x40216f <phase_4+72>
+   0x0000000000402169 <+66>:    cmp    rax,0x6
+   0x000000000040216d <+70>:    je     0x402174 <phase_4+77>
+   0x000000000040216f <+72>:    call   0x40244d <explode_bomb>
+   0x0000000000402174 <+77>:    mov    eax,0x0
+   0x0000000000402179 <+82>:    lea    rcx,[rip+0xcbcc0]        # 0x4cde40 <array.0>
+   0x0000000000402180 <+89>:    movzx  edx,BYTE PTR [rbx+rax*1]
+   0x0000000000402184 <+93>:    and    edx,0xf
+   0x0000000000402187 <+96>:    movzx  edx,BYTE PTR [rcx+rdx*1]
+   0x000000000040218b <+100>:   mov    BYTE PTR [rsp+rax*1+0x1],dl
+   0x000000000040218f <+104>:   add    rax,0x1
+   0x0000000000402193 <+108>:   cmp    rax,0x6
+   0x0000000000402197 <+112>:   jne    0x402180 <phase_4+89>
+   0x0000000000402199 <+114>:   mov    BYTE PTR [rsp+0x7],0x0
+   0x000000000040219e <+119>:   lea    rdi,[rsp+0x1]
+   0x00000000004021a3 <+124>:   lea    rsi,[rip+0xc4ef5]        # 0x4c709f
+   0x00000000004021aa <+131>:   call   0x401140
+   0x00000000004021af <+136>:   test   eax,eax
+   0x00000000004021b1 <+138>:   jne    0x4021cc <phase_4+165>
+   0x00000000004021b3 <+140>:   mov    rax,QWORD PTR [rsp+0x8]
+   0x00000000004021b8 <+145>:   sub    rax,QWORD PTR fs:0x28
+   0x00000000004021c1 <+154>:   jne    0x4021d3 <phase_4+172>
+   0x00000000004021c3 <+156>:   add    rsp,0x10
+   0x00000000004021c7 <+160>:   pop    rbx
+   0x00000000004021c8 <+161>:   pop    rbp
+   0x00000000004021c9 <+162>:   pop    r12
+   0x00000000004021cb <+164>:   ret
+   0x00000000004021cc <+165>:   call   0x40244d <explode_bomb>
+   0x00000000004021d1 <+170>:   jmp    0x4021b3 <phase_4+140>
+   0x00000000004021d3 <+172>:   call   0x432160 <__stack_chk_fail_local>
+End of assembler dump.
+
+$(gdb) x/s 0x4c7153
+0x4c7153:       "%s"
+
+$(gdb) x/s 0x4c709f
+0x4c709f:       "embole"
+
+$(gdb) x/16bx 0x4cde40
+0x4cde40 <array.0>:     0x65    0x67    0x6d    0x63    0x66    0x61    0x69    0x6a
+0x4cde48 <array.0+8>:   0x6f    0x70    0x6e    0x68    0x64    0x62    0x6b    0x6c
+
+=================================================================================
+
+
+(gdb) disas phase_defused
+Dump of assembler code for function phase_defused:
+   0x0000000000402638 <+0>:     endbr64
+   0x000000000040263c <+4>:     sub    rsp,0x118
+   0x0000000000402643 <+11>:    mov    rax,QWORD PTR fs:0x28
+   0x000000000040264c <+20>:    mov    QWORD PTR [rsp+0x108],rax
+   0x0000000000402654 <+28>:    xor    eax,eax
+   0x0000000000402656 <+30>:    cmp    DWORD PTR [rip+0xf8b5b],0x4        # 0x4fb1b8 <num_input_strings>
+   0x000000000040265d <+37>:    je     0x40267a <phase_defused+66>
+   0x000000000040265f <+39>:    mov    rax,QWORD PTR [rsp+0x108]
+   0x0000000000402667 <+47>:    sub    rax,QWORD PTR fs:0x28
+   0x0000000000402670 <+56>:    jne    0x4026eb <phase_defused+179>
+   0x0000000000402672 <+58>:    add    rsp,0x118
+   0x0000000000402679 <+65>:    ret
+   0x000000000040267a <+66>:    lea    rcx,[rsp+0xc]
+   0x000000000040267f <+71>:    lea    rdx,[rsp+0x90]
+   0x0000000000402687 <+79>:    lea    r8,[rsp+0x10]
+   0x000000000040268c <+84>:    lea    rsi,[rip+0xc4aba]        # 0x4c714d
+   0x0000000000402693 <+91>:    lea    rdi,[rip+0xf8c16]        # 0x4fb2b0 <input_strings+240>
+   0x000000000040269a <+98>:    call   0x407540 <__isoc99_sscanf>
+   0x000000000040269f <+103>:   cmp    eax,0x3
+   0x00000000004026a2 <+106>:   je     0x4026b2 <phase_defused+122>
+   0x00000000004026a4 <+108>:   lea    rdi,[rip+0xc74c5]        # 0x4c9b70
+   0x00000000004026ab <+115>:   call   0x4111a0 <puts>
+   0x00000000004026b0 <+120>:   jmp    0x40265f <phase_defused+39>
+   0x00000000004026b2 <+122>:   lea    rdi,[rsp+0x10]
+   0x00000000004026b7 <+127>:   lea    rsi,[rip+0xc4a98]        # 0x4c7156
+   0x00000000004026be <+134>:   call   0x402324 <strings_not_equal>
+   0x00000000004026c3 <+139>:   test   eax,eax
+   0x00000000004026c5 <+141>:   jne    0x4026a4 <phase_defused+108>
+   0x00000000004026c7 <+143>:   lea    rdi,[rip+0xc7442]        # 0x4c9b10
+   0x00000000004026ce <+150>:   call   0x4111a0 <puts>
+   0x00000000004026d3 <+155>:   lea    rdi,[rip+0xc7466]        # 0x4c9b40
+   0x00000000004026da <+162>:   call   0x4111a0 <puts>
+   0x00000000004026df <+167>:   mov    eax,0x0
+   0x00000000004026e4 <+172>:   call   0x402219 <secret_phase>
+   0x00000000004026e9 <+177>:   jmp    0x4026a4 <phase_defused+108>
+   0x00000000004026eb <+179>:   call   0x432160 <__stack_chk_fail_local>
+End of assembler dump.
+
+(gdb) disas secret_phase
+Dump of assembler code for function secret_phase:
+   0x0000000000402219 <+0>:     endbr64
+   0x000000000040221d <+4>:     push   rbx
+   0x000000000040221e <+5>:     call   0x4024f0 <read_line>
+   0x0000000000402223 <+10>:    mov    rdi,rax
+   0x0000000000402226 <+13>:    mov    edx,0xa
+   0x000000000040222b <+18>:    mov    esi,0x0
+   0x0000000000402230 <+23>:    call   0x4068d0 <strtoq>
+   0x0000000000402235 <+28>:    mov    ebx,eax
+   0x0000000000402237 <+30>:    sub    eax,0x1
+   0x000000000040223a <+33>:    cmp    eax,0x3e8
+   0x000000000040223f <+38>:    ja     0x402266 <secret_phase+77>
+   0x0000000000402241 <+40>:    mov    esi,ebx
+   0x0000000000402243 <+42>:    lea    rdi,[rip+0xf6fa6]        # 0x4f91f0 <n1>
+   0x000000000040224a <+49>:    call   0x4021d8 <fun7>
+   0x000000000040224f <+54>:    test   eax,eax
+   0x0000000000402251 <+56>:    jne    0x40226d <secret_phase+84>
+   0x0000000000402253 <+58>:    lea    rdi,[rip+0xc7856]        # 0x4c9ab0
+   0x000000000040225a <+65>:    call   0x4111a0 <puts>
+   0x000000000040225f <+70>:    call   0x402638 <phase_defused>
+   0x0000000000402264 <+75>:    pop    rbx
+   0x0000000000402265 <+76>:    ret
+   0x0000000000402266 <+77>:    call   0x40244d <explode_bomb>
+   0x000000000040226b <+82>:    jmp    0x402241 <secret_phase+40>
+   0x000000000040226d <+84>:    call   0x40244d <explode_bomb>
+   0x0000000000402272 <+89>:    jmp    0x402253 <secret_phase+58>
+End of assembler dump.
+
+(gdb) disas fun7
+Dump of assembler code for function fun7:
+   0x00000000004021d8 <+0>:     endbr64
+   0x00000000004021dc <+4>:     test   rdi,rdi
+   0x00000000004021df <+7>:     je     0x402213 <fun7+59>
+   0x00000000004021e1 <+9>:     sub    rsp,0x8
+   0x00000000004021e5 <+13>:    mov    edx,DWORD PTR [rdi]
+   0x00000000004021e7 <+15>:    cmp    edx,esi
+   0x00000000004021e9 <+17>:    jg     0x4021f7 <fun7+31>
+   0x00000000004021eb <+19>:    mov    eax,0x0
+   0x00000000004021f0 <+24>:    jne    0x402204 <fun7+44>
+   0x00000000004021f2 <+26>:    add    rsp,0x8
+   0x00000000004021f6 <+30>:    ret
+   0x00000000004021f7 <+31>:    mov    rdi,QWORD PTR [rdi+0x8]
+   0x00000000004021fb <+35>:    call   0x4021d8 <fun7>
+   0x0000000000402200 <+40>:    add    eax,eax
+   0x0000000000402202 <+42>:    jmp    0x4021f2 <fun7+26>
+   0x0000000000402204 <+44>:    mov    rdi,QWORD PTR [rdi+0x10]
+   0x0000000000402208 <+48>:    call   0x4021d8 <fun7>
+   0x000000000040220d <+53>:    lea    eax,[rax+rax*1+0x1]
+   0x0000000000402211 <+57>:    jmp    0x4021f2 <fun7+26>
+   0x0000000000402213 <+59>:    mov    eax,0xffffffff
+   0x0000000000402218 <+64>:    ret
+End of assembler dump.
+
+(gdb) x/s 0x4c714d
+0x4c714d:       "%s %d %s"
+
+(gdb) x/s 0x4c7156
+0x4c7156:       "abrete_sesamo"
+
+(gdb) x/3dw 0x4f91f0
+0x4f91f0 <n1>:  36      0       5214736
