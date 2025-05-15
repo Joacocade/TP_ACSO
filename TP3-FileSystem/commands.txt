@@ -1,0 +1,10 @@
+./diskimageaccess -ip samples/testdisks/basicDiskImage > basicDiskImageOut.txt
+diff basicDiskImageOut.txt samples/testdisks/basicDiskImage.gold
+
+./diskimageaccess -ip samples/testdisks/dirFnameSizeDiskImage > dirFnameSizeDiskImageOut.txt
+diff dirFnameSizeDiskImageOut.txt samples/testdisks/dirFnameSizeDiskImage.gold
+
+./diskimageaccess -ip samples/testdisks/depthFileDiskImage > depthFileDiskImageOut.txt
+diff depthFileDiskImageOut.txt samples/testdisks/depthFileDiskImage.gold
+
+./script
